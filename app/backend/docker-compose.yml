@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:17
+    container_name: app_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: app_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data"
+
+  express:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app_express
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: "postgresql://root:root@db:5432/app_db?schema=public"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    command: >
+      sh -lc "
+      npx prisma generate &&
+      npx prisma migrate dev --name init &&
+      npx prisma db seed &&
+      npm run dev
+      "
+
+volumes:
+  pgdata:
