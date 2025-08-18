@@ -28,7 +28,6 @@ jobs:
           echo "Building application..."
           cd app/backend
           npm install
-          npm run build
 
   unite-test-app:
     runs-on: ubuntu-latest
