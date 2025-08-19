@@ -59,7 +59,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/visiobook-esp/repo-test-infra-express:latest ./app/frontend
+          docker build -t ghcr.io/visiobook-esp/repo-test-infra-express:latest ./app/backend
 
       - name: Push Docker image
         run: |
